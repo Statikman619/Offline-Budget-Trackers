@@ -12,6 +12,7 @@ const PRECACHE = "precache-v1";
 const RUNTIME = "runtime";
 const DATACACHE = "datacache-v1";
 
+// install
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
@@ -21,26 +22,31 @@ self.addEventListener("install", (event) => {
   );
 });
 
+// fetch
 self.addEventListener("fetch", (event) => {
+  // cache successful request to the API
   if (event.request.url.includes("/api/")) {
     event.respondWith(
       caches.open(DATACACHE).then((cachedResponse) => {
         return fetch(event.request)
           .then((response) => {
+            // if the response is successful, clone it and store it in the cache
             if (response.status === 200) {
-              cache.put(event.request.url, response.clone());
+              cachedResponse.put(event.request.url, response.clone());
             }
             return response;
           })
           .catch((err) => {
-            return cache.match(event.request);
+            // Network request failed, try to get it from the cache
+            return cachedResponse.match(event.request);
           });
       })
     );
   }
+  // if the request is not for the API, use static assets using offline tracker
   event.respondWith(
-    fetch(event.request).catch(function() {
-      return caches.match(event.request).then(function(response) {
+    fetch(event.request).catch(function () {
+      return caches.match(event.request).then(function (response) {
         if (response) {
           return response;
         } else if (event.request.headers.get("accept").includes("text/html")) {
@@ -50,3 +56,4 @@ self.addEventListener("fetch", (event) => {
       });
     })
   );
+});
