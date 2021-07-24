@@ -2,7 +2,8 @@ const request = window.indexedDB.open("tracker", 1);
 let db, tx, store;
 
 request.onupgradeneeded = function (e) {
-  const db = request.result;
+  db = request.result;
+  console.log("db this is DB", db);
   db.createObjectStore("trackerStore", { keyPath: "_id" });
 };
 
@@ -12,6 +13,11 @@ request.onerror = function (e) {
 
 request.onsuccess = function (e) {
   db = request.result;
+  console.log(getData);
+  getData();
+};
+
+const getData = () => {
   tx = db.transaction("trackerStore", "readwrite");
   store = tx.objectStore("trackerStore");
 
@@ -34,3 +40,6 @@ request.onsuccess = function (e) {
     db.close();
   };
 };
+
+window.addEventListener("online", getData);
+const saveRecord = ()
