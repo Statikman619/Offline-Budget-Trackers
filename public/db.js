@@ -1,44 +1,23 @@
-let db, tx, store;
-const request = window.indexedDB.open("tracker", 1);
+let db;
+// create a new db request for a "budget" database.
+const request = indexedDB.open("budget", 1);
 
-request.onupgradeneeded = function (e) {
-  db = request.result;
-  db.createObjectStore("trackerStore", { keyPath: "_id" });
+request.onupgradeneeded = function (event) {
+  // create object store called "pending" and set autoIncrement to true
+  const db = event.target.result;
+  db.createObjectStore("pending", { autoIncrement: true });
 };
 
-request.onsuccess = function (e) {
-  db = request.result;
-  console.log(getData);
-  getData();
-};
+request.onsuccess = function (event) {
+  db = event.target.result;
+  console.log("request result", db);
 
-request.onerror = function (e) {
-  console.log("There was an error", e);
-};
-
-const getData = () => {
-  tx = db.transaction("trackerStore", "readwrite");
-  store = tx.objectStore("trackerStore");
-
-  db.onerror = function (e) {
-    console.log("error");
-  };
-  if (method === "put") {
-    store.put(object);
+  // check if app is online before reading from db
+  if (navigator.onLine) {
+    checkDatabase();
   }
-  if (method === "clear") {
-    store.clear();
-  }
-  if (method === "get") {
-    const all = store.getAll();
-    all.onsuccess = function () {
-      resolve(all.result);
-    };
-  }
-  tx.oncomplete = function () {
-    db.close();
-  };
 };
 
-window.addEventListener("online", getData);
-const saveRecord = ()
+request.onerror = function (event) {
+  console.log("Woops! " + event.target.errorCode);
+};
