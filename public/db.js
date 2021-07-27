@@ -1,20 +1,19 @@
-const request = window.indexedDB.open("tracker", 1);
 let db, tx, store;
+const request = window.indexedDB.open("tracker", 1);
 
 request.onupgradeneeded = function (e) {
   db = request.result;
-  console.log("db this is DB", db);
   db.createObjectStore("trackerStore", { keyPath: "_id" });
-};
-
-request.onerror = function (e) {
-  console.log("There was an error", e);
 };
 
 request.onsuccess = function (e) {
   db = request.result;
   console.log(getData);
   getData();
+};
+
+request.onerror = function (e) {
+  console.log("There was an error", e);
 };
 
 const getData = () => {
