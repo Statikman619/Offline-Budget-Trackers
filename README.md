@@ -16,9 +16,10 @@ HerokuLink https://michael-budget-trackers.herokuapp.com/
 ## Description
 A user will be able to add expenses and deposits to their budget with or without a connection. When entering transactions offline, they should populate the total when brought back online.
 ## Installation 
-npm i and add all the related dependencies
+Clone this repository to receive all my files. Once you have my code make sure you are in the correct file directory.
+in the command line run "npm install" in the terminal to download all the needed dependencies.
 ## Usage 
-Add transactions or deposits while offline and they will appear once you're back online.
+You can Add transactions and name them anything you like you can also add deposits all while you're offline but they will not appear until you're back online.
 ## License MIT
 ## Contributors
 Mike with the help of Herm, Elma, Joey during office hours and my awesome tutor Andrew.
